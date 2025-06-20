@@ -59,7 +59,7 @@ public class SlotServiceImpl implements SlotService {
                         .notes(request.getNotes())
                         .build();
 
-                // ✅ CONFLICT DETECTION START
+                // CONFLICT DETECTION START
                 List<Slot> conflictingSlots = slotRepository.findAll().stream()
                         .filter(s -> s.getDoctorId().equals(slot.getDoctorId()))
                         .filter(s -> s.getSlotDate().isEqual(slot.getSlotDate()))
@@ -71,11 +71,11 @@ public class SlotServiceImpl implements SlotService {
 
                 if (!conflictingSlots.isEmpty()) {
                     return ResponseEntity.status(HttpStatus.CONFLICT)
-                            .body("❌ Conflict: Slot for " + slot.getSlotDate() +
+                            .body(" Conflict: Slot for " + slot.getSlotDate() +
                                   " from " + slot.getStartTime() + " to " + slot.getEndTime() +
                                   " overlaps with existing slot(s).");
                 }
-                // ✅ CONFLICT DETECTION END
+                // CONFLICT DETECTION END
 
                 slots.add(slot);
                 startTime = startTime.plusMinutes(request.getSlotDuration());
@@ -87,7 +87,7 @@ public class SlotServiceImpl implements SlotService {
             logAction(s.getId(), s.getDoctorId(), "CREATE_SLOT", "Slot created.");
         }
 
-        return ResponseEntity.ok("✅ Created " + slots.size() + " slots.");
+        return ResponseEntity.ok(" Created " + slots.size() + " slots.");
     }
 
 
@@ -171,7 +171,7 @@ public class SlotServiceImpl implements SlotService {
 
         // Rule: Block Walk-In or Emergency slots
         if (slot.getAccessType() == SlotAccessType.WALK_IN || slot.getAccessType() == SlotAccessType.EMERGENCY) {
-            return ResponseEntity.badRequest().body("❌ This slot is reserved for walk-ins or emergencies only.");
+            return ResponseEntity.badRequest().body(" This slot is reserved for walk-ins or emergencies only.");
         }
 
         // Rule 1: Max 10 bookings per doctor per day
@@ -182,7 +182,7 @@ public class SlotServiceImpl implements SlotService {
                 .count();
 
         if (dailyBookings >= 10) {
-            return ResponseEntity.badRequest().body("❌ Doctor already has 10 bookings for " + slot.getSlotDate());
+            return ResponseEntity.badRequest().body(" Doctor already has 10 bookings for " + slot.getSlotDate());
         }
 
         // Rule 2: Minimum 15-minute gap between appointments
@@ -195,17 +195,17 @@ public class SlotServiceImpl implements SlotService {
                 );
 
         if (gapViolation) {
-            return ResponseEntity.badRequest().body("❌ Cannot book: Less than 15 minutes gap from another booking.");
+            return ResponseEntity.badRequest().body(" Cannot book: Less than 15 minutes gap from another booking.");
         }
 
         // Rule 3: Max 7 days advance booking
         if (slot.getSlotDate().isAfter(LocalDate.now().plusDays(7))) {
-            return ResponseEntity.badRequest().body("❌ You can only book slots up to 7 days in advance.");
+            return ResponseEntity.badRequest().body(" You can only book slots up to 7 days in advance.");
         }
 
         // Rule 4: Same-day booking cutoff before 5:00 PM
         if (slot.getSlotDate().isEqual(LocalDate.now()) && LocalTime.now().isAfter(LocalTime.of(17, 0))) {
-            return ResponseEntity.badRequest().body("❌ Same-day bookings must be made before 5:00 PM.");
+            return ResponseEntity.badRequest().body(" Same-day bookings must be made before 5:00 PM.");
         }
 
         //  Mark slot as booked
@@ -215,7 +215,7 @@ public class SlotServiceImpl implements SlotService {
         logAction(slot.getId(), slot.getDoctorId(), "BOOK_SLOT", "Slot booked successfully.");
 
 
-        return ResponseEntity.ok("✅ Slot " + slot.getId() + " has been booked.");
+        return ResponseEntity.ok(" Slot " + slot.getId() + " has been booked.");
     }
 
     
@@ -271,7 +271,7 @@ public class SlotServiceImpl implements SlotService {
         for (Slot slot : slotsToBlock) {
             slot.setSlotStatus(SlotStatus.BLOCKED);
 
-            // ✅ Log each blocked slot
+            //  Log each blocked slot
             logAction(
                 slot.getId(),
                 slot.getDoctorId(),
@@ -300,11 +300,11 @@ public class SlotServiceImpl implements SlotService {
                 .toList();
 
         if (availableSlots.isEmpty()) {
-            return ResponseEntity.ok("❌ No available slots found for this doctor on given date.");
+            return ResponseEntity.ok(" No available slots found for this doctor on given date.");
         }
 
         Slot recommended = availableSlots.get(0);
-        String response = "✅ Recommended slot: " + recommended.getSlotDate() + " | " +
+        String response = " Recommended slot: " + recommended.getSlotDate() + " | " +
                 recommended.getStartTime() + " to " + recommended.getEndTime() + " at " + recommended.getLocation();
 
         return ResponseEntity.ok(response);
@@ -313,7 +313,7 @@ public class SlotServiceImpl implements SlotService {
     @Override
     public ResponseEntity<?> bulkDelete(SlotManagementRequest request) {
         if (request.getDoctorId() == null || request.getStartDate() == null || request.getEndDate() == null) {
-            return ResponseEntity.badRequest().body("❌ Missing required fields: doctorId, startDate, endDate.");
+            return ResponseEntity.badRequest().body(" Missing required fields: doctorId, startDate, endDate.");
         }
 
         List<Slot> slotsToDelete = slotRepository.findAll().stream()
@@ -323,7 +323,7 @@ public class SlotServiceImpl implements SlotService {
 
         slotRepository.deleteAll(slotsToDelete);
 
-        return ResponseEntity.ok("✅ Deleted " + slotsToDelete.size() + " slots for Doctor ID " +
+        return ResponseEntity.ok(" Deleted " + slotsToDelete.size() + " slots for Doctor ID " +
                 request.getDoctorId() + " between " + request.getStartDate() + " and " + request.getEndDate() + ".");
     }
     
