@@ -169,7 +169,7 @@ public class SlotServiceImpl implements SlotService {
             return ResponseEntity.badRequest().body("Slot is not available.");
         }
 
-        // Rule: Block Walk-In or Emergency slots
+        // Rule0: Block Walk-In or Emergency slots
         if (slot.getAccessType() == SlotAccessType.WALK_IN || slot.getAccessType() == SlotAccessType.EMERGENCY) {
             return ResponseEntity.badRequest().body(" This slot is reserved for walk-ins or emergencies only.");
         }
@@ -333,7 +333,7 @@ public class SlotServiceImpl implements SlotService {
                 .doctorId(doctorId)
                 .action(action)
                 .message(message)
-                .performedBy("system") // in future this can be replaced with username from session/token
+                .performedBy("system") // in future this can be replaced with username from session
                 .timestamp(LocalDateTime.now())
                 .build();
 
