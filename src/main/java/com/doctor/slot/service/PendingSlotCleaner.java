@@ -18,7 +18,7 @@ public class PendingSlotCleaner {
 
     private final SlotRepository slotRepository;
 
-    // ⏱️ This runs every 60 seconds (1 min)
+    //This runs every 60 seconds (1 min)
     @Scheduled(fixedRate = 60000)
     public void cleanExpiredPendingSlots() {
         LocalDateTime expiryTime = LocalDateTime.now().minusMinutes(5);

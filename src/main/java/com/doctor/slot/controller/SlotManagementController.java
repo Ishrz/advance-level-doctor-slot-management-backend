@@ -1,11 +1,15 @@
 package com.doctor.slot.controller;
 
-import com.doctor.slot.dto.SlotManagementRequest;
-import com.doctor.slot.model.SlotAction;
-import com.doctor.slot.service.SlotService;
-import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.doctor.slot.dto.SlotManagementRequest;
+import com.doctor.slot.service.SlotService;
+
+import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/api/v1/slot-management")
@@ -16,6 +20,8 @@ public class SlotManagementController {
 
     @PostMapping
     public ResponseEntity<?> handleSlotAction(@RequestBody SlotManagementRequest request) {
+    	
+    	 System.out.println("🟢 SLOT API HIT: " + request.getAction());
         if (request.getAction() == null) {
             return ResponseEntity.badRequest().body("Missing action type.");
         }
@@ -37,6 +43,9 @@ public class SlotManagementController {
                 return slotService.recommendSlot(request);
             case BULK_DELETE:
                 return slotService.bulkDelete(request);
+            case GET_SLOTS:
+                return slotService.getSlots(request);
+
 
 
 

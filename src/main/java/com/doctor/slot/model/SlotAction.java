@@ -8,7 +8,8 @@ public enum SlotAction {
     MARK_UNAVAILABLE,
     LOCK_SLOT,
     RECOMMEND_SLOT,
-    BULK_DELETE
+    BULK_DELETE,
+    GET_SLOTS
 
 
 }

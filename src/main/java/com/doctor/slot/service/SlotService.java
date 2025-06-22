@@ -20,6 +20,9 @@ public interface SlotService {
     ResponseEntity<?> recommendSlot(SlotManagementRequest request);
     
     ResponseEntity<?> bulkDelete(SlotManagementRequest request);
+    
+    ResponseEntity<?> getSlots(SlotManagementRequest request);
+
 
 
 
