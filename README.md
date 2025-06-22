@@ -1,9 +1,12 @@
 
 
 
-# 🩺 Advanced-Level Doctor Slot Management – Spring Boot Backend
+# 🎨 Doctor Slot Management System — Backend (Spring Boot)
 
-This is a production-ready Spring Boot application for managing doctor appointment slots — built for assignment and aligned with real-world hospital scheduling systems.
+This is the **Spring-Boot based Backend** for the **Advanced Doctor Slot Management System**, a fullstack project designed to manage doctor availability, patient appointments, and smart slot recommendations etc.
+
+> ## 🔗 Frontend Repository
+➡️ [React Frontend for DSMS](https://github.com/Ishrz/advance-level-doctor-slot-management-frontend)
 
 ---
 
@@ -100,4 +103,3 @@ Slot analytics with charts
 
 ✅ Status
 💯 Backend complete and tested
-📦 Ready for frontend integration
